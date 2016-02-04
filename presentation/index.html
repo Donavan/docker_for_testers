@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Docker for Test Engineers</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="reveal">
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section id="title">
+            <h1>Docker for test engineers</h1>
+            <h3>Configuration is code</h3>
+            <p>
+                <small>Created by <a href="http://hakim.se">Donavan Stanley</a> of CoverMyMeds</small>
+            </p>
+        </section>
+
+        <section id="who_is_this_guy">
+            <h3>Obligatory "Who Is This Guy?" section</h3>
+            <section id="about_me">
+                <ul>
+                    <li>Old school systems programmer</li>
+                    <small>I've seen the terrors of the world and understood the intrinsic horror of existence</small>
+                    <li>Full-stack hipster</li>
+                    <small>I'm really just old.</small>
+                    <li>Test Engineer</li>
+                    <small>Because it's surprisingly hard to get right.</small>
+                </ul>
+            </section>
+            <section id="cover_my_meds">
+                <img src="CoverMyMeds_Logo.png">
+                <ul>
+                    <li>Great place to work!</li>
+                    <li>Smart people!</li>
+                    <li>Free beer!</li>
+                    <li>We're hiring!</li>
+                </ul>
+            </section>
+        </section>
+
+        <section id="what_is_docker">
+            <h1>What is Docker?</h1>
+            <section id="blurbspeak">
+                <h4>“<i>an open source project to pack, ship and run any application as a lightweight container.</i>”
+                </h4>
+            </section>
+            <section id="like_shipping">
+                <h3>like shipping containers: they provide a standard, consistent way of shipping just about
+                    anything.</h3>
+                <img src="shipping.png">
+            </section>
+            <section id="like_vms">
+                <h3>like virtual machines, except they're not.</h3>
+                <img src="vms-vs-containers.png">
+            </section>
+        </section>
+
+        <section id="docker_arch">
+            <h1>Docker’s architecture</h1>
+            <section id="low_level">
+                <h3>Low Level</h3>
+                <ul>
+                    <li><b>Libcontainer</b> - A lightweight alternative to full machine virtualization such as that
+                        provided by “traditional” hypervisors
+                    </li>
+                    <li><b>Copy-on-write filesystem</b> - Allows Docker to instantiate containers very quickly—instead
+                        of having to make full copies of whatever files comprise a container.
+                    </li>
+                    <li><b>UnionFS</b> - Layer stacking makes containers small and fast.</li>
+                </ul>
+            </section>
+            <section id="high_level">
+                <h4>High Level</h4>
+                <img src="architecture.svg">
+                <p>
+                    <small>Source: <i>https://docs.docker.com/engine/introduction/understanding-docker/</i></small>
+                </p>
+            </section>
+            <section id="docker_client">
+                <h4>Docker Client</h4>
+                <ul>
+                    <li>The docker binary, is the primary user interface to Docker.</li>
+                    <li>It accepts commands from the user and communicates back and forth with a Docker daemon.</li>
+                </ul>
+            </section>
+            <section id="docker_daemon">
+                <h4>Docker Daemon</h4>
+                <ul>
+                    <li>Runs on a host machine</li>
+                    <li>No direct interaction beyond stop/start.</li>
+                    <li>Requires a Linux host.</li>
+                </ul>
+            </section>
+            <section id="docker_images">
+                <h4>Docker images</h4>
+                <ul>
+                    <li>A read-only template.</li>
+                    <li>Could contain an OS, web server and your application.</li>
+                    <li>Used to create Docker containers.</li>
+                    <li><b>Plain text DSL</b> - Makes creating images straightforward and "easy".</li>
+                    <li>The <b>build</b> component of Docker.</li>
+                </ul>
+            </section>
+            <section id="starter_dockerfile">
+                <h4>Dockerfile</h4>
+                <img src="my_dockerfile_1.png">
+            </section>
+            <section id="real_dockerfile">
+                <h4>The complicated version</h4>
+                <img src="my_dockerfile_2.png">
+                <p>&nbsp;</p>
+                <h3>https://github.com/jwilder/dockerize</h3>
+            </section>
+            <section id="long_dockerfile_1">
+                <h4>The long version</h4>
+                <img src="my_dockerfile_3.png">
+            </section>
+            <section id="long_dockerfile_2">
+                <h4>No really..</h4>
+                <img src="my_dockerfile_4.png">
+            </section>
+            <section id="dockerfiles_are-easy">
+                <h4>Dockerfiles are easy</h4>
+                <h3>If you can install it on Linux*.</h3>
+                <h3>If you can probably run it in Docker.</h3>
+            </section>
+            <section id="docker_registries">
+                <h4>Docker registries</h4>
+                <ul>
+                    <li>Public / private stores from which you upload or download images.</li>
+                    <li>Docker Hub serves a huge collection of existing images for your use.</li>
+                    <li>Private self-hosted registries possible.</li>
+                    <li>The <b>distribution</b> component of Docker.</li>
+                </ul>
+            </section>
+            <section id="docker_containers">
+                <h4>Docker containers</h4>
+                <ul>
+                    <li>Similar to a directory.</li>
+                    <li>Holds everything that is needed for an application to run.</li>
+                    <li>Created from a Docker image.</li>
+                    <li>Can be run, started, stopped, moved, and deleted.</li>
+                    <li>Isolated and secure application platform.</li>
+                    <li>The <b>run</b> component of Docker.</li>
+                </ul>
+            </section>
+            <section id="docker_compose">
+                <h4>Docker Compose</h4>
+                <ul>
+                    <li>Tool for defining and running multi-container Docker applications.</li>
+                    <li>Use a Compose file to configure your application’s services.</li>
+                    <li>Use a single command, to create and start all the services from your configuration.</li>
+                    <li>Multiple isolated environments on a single host.</li>
+                    <code>
+                        <pre>docker-compose up</pre>
+                    </code>
+                    <li>Great for development, testing, and staging environments.</li>
+                    <li>Also great for CI workflows</li>
+                </ul>
+            </section>
+            <section id="docker_compose_yml">
+                <h4>docker-compose.yml</h4>
+                <img src="my_docker_compose.png">
+            </section>
+            <section id="automated_testing_use_case">
+                <h3>Use case: Automated testing</h3>
+                <ul>
+                    <li>Quick and Dirty Script</li>
+                    <img src="test_script.png">
+                    <li>Or run your tests inside.</li>
+                </ul>
+            </section>
+
+        </section>
+
+        <section id="'why_docker">
+            <h1>Why Docker?</h1>
+            <section id="simple_config">
+                <h3>Simplify Configuration</h3>
+                <ul>
+                    <li>Treat your environment and configuration like code and deploy it.</li>
+                    <li>Decouple infrastructure requirements.</li>
+                    <li>Run your applications across multiple IaaS/PaaS without any extra tweaks</li>
+                </ul>
+            </section>
+            <section id="code_pipieline">
+                <h3>Manage your code pipeline</h3>
+                <ul>
+                    <li>Docker provides a consistent environment for the application.</li>
+                    <li>Docker images are immutable.</li>
+                    <li>Docker images can be "spun up" quickly.</li>
+                    <li>Achieve zero change in application runtime environments across dev through production</li>
+                </ul>
+            </section>
+            <section id="dev_productivity">
+                <h3>Developer Productivity</h3>
+                <ul>
+                    <li>Docker easily allows a many services to run, due to low overhead.</li>
+                    <li>Shared volumes make the application code available to the container(s).</li>
+                    <li>Edit code from your platform of choice and see the changes right away.</li>
+                    <li>Spin up the world, without being an expert.</li>
+                </ul>
+            </section>
+            <section id="sever_consol">
+                <h3>Server Consolidation</h3>
+                <ul>
+                    <li>Application isolation allows consolidating multiple servers to save on cost</li>
+                    <li>Without the memory footprint of multiple OSes</li>
+                    <li>Share unused memory across the instances.</li>
+                    <li>New breed of PAAS all use containers.</li>
+                    <li>Spin up the world, without being an expert.</li>
+                </ul>
+            </section>
+            <section id="rapid_deployment">
+                <h3>Rapid Deployment</h3>
+                <ul>
+                    <li>Before VMs, bringing up a new hardware resource took days.</li>
+                    <li>Virtualization brought this number down to minutes.</li>
+                    <li>Docker brings it down to seconds.</li>
+                </ul>
+            </section>
+            <section id="multi_tenancy">
+                <h3>Multi-tenancy</h3>
+                <ul>
+                    <li>Create isolated environments for running multiple instances of app tiers for each tenant</li>
+                    <li>A complete world is only a <i>docker-compose up</i> away</li>
+                    <li>Encapsulate custom behavior in custom containers.</li>
+                </ul>
+            </section>
+        </section>
+
+        <section id="why_not_docker">
+            <h1>Why Not Docker?</h1>
+            <ul>
+                <li>Tooling - But not for long. Kubernetes, Docker Swarm etc</li>
+                <li>Operations - Edge Kernels, Filesystem woes, cleanup</li>
+                <li>Security -  Most vendors still run containers in virtual machines, which have battle-tested security</li>
+            </ul>
+        </section>
+
+        <section id="running_docker">
+            <h1>Running Docker</h1>
+            <section id="bash_intro_1">
+                <h3>You need an environment.</h3>
+            </section>
+            <section id="bash_intro_2">
+                <h3>Let's make a VM!</h3>
+            </section>
+            <section id="bash_intro_3">
+                <img src="time.png">
+            </section>
+            <section id="bash_demo">
+                <video data-autoplay src="docker_ubuntu_bash.mov"></video>
+            </section>
+            <section id="bash_expl">
+                <h3>What just happened?</h3>
+                <ul class="fragment">
+                    <li>First run pulled the images from Docker Hub.</li>
+                    <li>Once pulled a container was created from the image.</li>
+                    <li>A read-write layer is added to the image</li>
+                    <li>Docker then launched the container, running bash inside it.</li>
+                    <li>On the second run, the images already existed, much faster!</li>
+                </ul>
+            </section>
+            <section id="node_demo_intro">
+                <h3>"Real World" example</h3>
+            </section>
+            <section id="node_demo">
+                <p>&nbsp;</p>
+                <video data-autoplay src="node_demo.mov"></video>
+            </section>
+            <section id="port_mapping">
+                <h3>Port mapping</h3>
+                <ul>
+                    <li>Docker creates a network interface that allows the Docker container to talk to the local host.
+                    </li>
+                    <li>Ports are "exposed" in the Dockerfile.</li>
+                    <li>Map container ports to host ports with the "-p" command line option.</li>
+                    <li>OSX/Windows users need to map twice.</li>
+                </ul>
+            </section>
+            <section id="linking">
+                <h3>Linking containers ("old school" style)</h3>
+                <ul>
+                    <li>Use "<i>--name</i>" to name containers</li>
+                    <code>
+                        <pre>docker run -d --name training_db training/postgres</pre>
+                    </code>
+                    <li>Use "<i>--link &lt;name or id&gt;:alias</i>" to link containers</li>
+                    <code>
+                        <pre>docker run -d -P --name web --link training_db:db training/webapp python app.py</pre>
+                    </code>
+                </ul>
+            </section>
+        </section>
+
+        <section id="tools_for_testers">
+            <h1>Docker Tools for Testers</h1>
+            <section id="headless_testing">
+                <h3>Headless Testing</h3>
+                <p>
+                    <code><pre>docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome</pre></code></p>
+                <p>or</p>
+                <p><code>
+                    <pre>docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-firefox</pre>
+                </code></p>
+                <p>
+                    <small>-v /dev/shm:/dev/shm to use the host's shared memory.</small>
+                </p>
+                <p>
+                    <code class="ruby">
+                                <pre>
+require 'watir-webdriver'
+caps = Selenium::WebDriver::Remote::Capabilities.chrome
+browser = Watir::Browser.new( :remote,
+                              :url => "http://localhost:4444/wd/hub",
+                              :desired_capabilities => caps)
+                                </pre>
+                    </code>
+                </p>
+                <p>Note: Only one browser can listen on 4444.</p>
+            </section>
+            <section id="your_own_grid_1">
+                <p>&nbsp;</p>
+                <h3>Your own grid</h3>
+                <section>
+                    <p><code>
+                        <pre>docker run -d -p 4444:4444 --name selenium-hub selenium/hub</pre>
+                    </code></p>
+                    <p>then</p>
+                    <p><code>
+                        <pre>docker run -d --link selenium-hub:hub -v /dev/shm:/dev/shm selenium/standalone-chrome</pre>
+                    </code>
+                        <small>a bunch of times</small>
+                    </p>
+                    <p>
+                        <code class="ruby">
+                                <pre>
+require 'watir-webdriver'
+caps = Selenium::WebDriver::Remote::Capabilities.chrome
+browser = Watir::Browser.new( :remote,
+                              :url => "http://localhost:4444/wd/hub",
+                              :desired_capabilities => caps)
+                                </pre>
+                        </code>
+                    </p>
+                </section>
+            </section>
+            <section id="your_own_grid_2">
+                <p>&nbsp;</p>
+                <h3>Your own grid (the right way)</h3>
+                <section>
+                    <img src="hub_compose.png">
+                    <p>
+                        <code>
+                            <pre>docker-compose scale chrome=15 firefox=15</pre>
+                        </code>
+                    </p>
+                    <p>Now add the parallel_tests gem and go to town!</p>
+                </section>
+            </section>
+            <section id="elk_stack">
+                <p>&nbsp;</p>
+                <h3>ELK Stack</h3>
+                <ul>
+                    <li>Elasticsearch, Logstash, and Kibana</li>
+                    <li>Elasticsearch is a distributed, open source search and analytics engine.</li>
+                    <li>Logstash is an open source data collection, enrichment, and transportation pipeline.</li>
+                    <li>Kibana is an open source data visualization platform.</li>
+                    <li>Many moving parts</li>
+                    <img src="kibana.png">
+                </ul>
+            </section>
+            <section id="elastic_results">
+                <h3>Elastic Results</h3>
+                <ul>
+                    <li>Store RSpec / Cucumber results in elastic search.</li>
+                    <li>https://github.com/covermymeds/elastic_results</li>
+                    <li><img src="elastic_1.png"></li>
+                </ul>
+            </section>
+        </section>
+        <section id="more_info">
+            <h3>More Info</h3>
+            <ul>Steps Towards Automated Testing with Docker and Jenkins
+                <small>http://making.meetup.com/post/122890386432/steps-towards-automated-testing-with-docker-and
+                </small>
+            </ul>
+            <ul>Repeatable and Testable Deployments
+                <small>https://docs.quay.io/solution/repeatable-deployments.html</small>
+            </ul>
+        </section>
+    </div>
+
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        width: 1920,
+        height: 1080,
+
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+            {
+                src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: 'plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            {src: 'plugin/zoom-js/zoom.js', async: true},
+            {src: 'plugin/notes/notes.js', async: true}
+        ]
+    });
+
+</script>
+
+</body>
+</html>
